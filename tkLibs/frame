@@ -1,0 +1,66 @@
+from tkinter import *
+from tkinter.ttk import *
+
+
+class frame(Frame):
+    def __init__(self, parent):
+        self.parent = parent
+        Frame.__init__(self, self.parent)
+
+        self.__alignment = W
+        self.__column = 0
+        self.__padding = (0, 0)
+        self.__placed = False
+        self.__row = 0
+        self.__stetch = ''
+
+
+    def Destroy(self):
+        for child in self.winfo_children():
+            child.destroy()
+        self.destroy()
+
+
+    def Place(self, row, column):
+        self.__row = row
+        self.__column = column
+        self.__placed = True
+
+        self.grid(row=self.__row, column=self.__column, padx=self.__padding[0], pady=self.__padding[1], sticky=self.__alignment+self.__stretch)
+
+
+    def Set_Alignment(self, alignment):
+        alignmentOptions = {'left': W, 'right': E, 'top': N, 'bottom': S}
+
+        alignment = alignment.lower()
+        if alignment in alignmentOptions.keys():
+            self.__alignment = alignmentOptions[alignment]
+            if self.__placed:
+                self.grid(sticky=self.__alignment)
+
+
+    def Set_Border(self, borderStyle):
+        borderDictionary = {'flat': FLAT, 'sunken': SUNKEN, 'raised': RAISED, 'groove': GROOVE, 'ridge': RIDGE}
+        if borderStyle.lower() in borderDictionary:
+            self.configure(relief=borderDictionary[borderStyle.lower()])
+            if self.borderwidth == 0:
+                self.Set_Border_Width(1)
+
+
+    def Set_Border_Width(self, width):
+        self.borderwidth = width
+        self.configure(borderwidth=width)
+
+
+    def Set_Padding(self, x, y):
+        self.__padding = (x, y)
+        if self.__placed:
+            self.grid(padx=self.__padding[0], pady=self.__padding[1])
+
+
+    def Stretch(self, x=False, y=False):
+        self.__stretch = ''
+        if x: self.__stretch = self.__stretch + E + W
+        if y: self.__stretch = self.__stretch + N + S
+        if self.__placed:
+            self.grid(sticky=self.__alignment + self.__stretch)

@@ -1,2 +1,4 @@
 # Ignore these patterns
+__pycache__/
 .idea/
+test.py
